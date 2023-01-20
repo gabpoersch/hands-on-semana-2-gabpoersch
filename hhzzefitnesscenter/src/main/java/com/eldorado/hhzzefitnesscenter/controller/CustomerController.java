@@ -1,9 +1,20 @@
 package com.eldorado.hhzzefitnesscenter.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.eldorado.hhzzefitnesscenter.model.Customer;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
-@RestController
-@RequestMapping("/customer")
-public class CustomerController {
+public interface CustomerController {
+//    @PostMapping
+    public void addCustomer(Customer customer);
+
+//    @PutMapping("/data/{id}")
+    public void addCustomerWeightAndHeight(Long id, double weight, double height);
+
+//    @GetMapping("/data/{id}")
+    public void getCustomerBMI(Long id);
+
+//    @PutMapping("/data/{id}")
+    public void editCustomerWeightAndHeight(Long id, double newWeight, double newHeight);
 }

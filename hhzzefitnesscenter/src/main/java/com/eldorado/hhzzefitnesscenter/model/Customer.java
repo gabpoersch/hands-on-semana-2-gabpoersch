@@ -22,11 +22,17 @@ public class Customer {
     private Date birthDate;
 
     @Field(name = "days_per_month")
-    private int daysPerMonth;
+    private Integer daysPerMonth;
 
     @Field(name = "phone")
     private String phone;
 
     @Field(name = "address")
     private String address;
+
+    @Field(name = "weight")
+    private Double weight;
+
+    @Field(name = "height")
+    private Double height;
 }
