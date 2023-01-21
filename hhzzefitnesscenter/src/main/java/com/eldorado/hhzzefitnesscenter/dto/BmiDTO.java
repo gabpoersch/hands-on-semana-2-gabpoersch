@@ -5,8 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CustomerBodyInfoResponseDTO {
+public class BmiDTO {
     private Long id;
-    private Double weight;
-    private Double height;
+    private String name;
+    private Double bmi;
+    private String category;
 }

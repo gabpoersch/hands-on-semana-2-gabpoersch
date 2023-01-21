@@ -1,11 +1,11 @@
-package com.eldorado.hhzzefitnesscenter.dto;
+package com.eldorado.hhzzefitnesscenter.dto.bodyinfo;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class CustomerWeightAndHeightResponseDTO {
+public class BodyInfoResponseDTO {
     private Long id;
     private Double oldWeight;
     private Double newWeight;

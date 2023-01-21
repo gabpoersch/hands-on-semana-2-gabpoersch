@@ -1,6 +1,5 @@
 package com.eldorado.hhzzefitnesscenter.model;
 
-import com.mongodb.lang.Nullable;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -8,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -26,7 +25,7 @@ public class Customer {
     private Long id;
 
     @Field(name = "birth_date")
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Field(name = "days_per_month")
     private Integer daysPerMonth;
@@ -37,9 +36,4 @@ public class Customer {
     @Field(name = "address")
     private String address;
 
-    @Field(name = "weight")
-    private Double weight;
-
-    @Field(name = "height")
-    private Double height;
 }
