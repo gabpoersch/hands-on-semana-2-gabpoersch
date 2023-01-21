@@ -1,15 +1,18 @@
 package com.eldorado.hhzzefitnesscenter.controller;
 
 import com.eldorado.hhzzefitnesscenter.dto.CustomerSaveDTO;
+import com.eldorado.hhzzefitnesscenter.dto.CustomerWeightAndHeightRequestDTO;
+import com.eldorado.hhzzefitnesscenter.dto.CustomerWeightAndHeightResponseDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 public interface CustomerController {
-    @PostMapping(consumes = "application/json")
-    ResponseEntity<CustomerSaveDTO> addCustomer(@RequestBody CustomerSaveDTO customerSaveDTO);
 
-    @PutMapping("/data/{id}")
-    public void addCustomerWeightAndHeight(@PathVariable Long id, double weight, double height);
+    ResponseEntity<CustomerSaveDTO> addCustomer(CustomerSaveDTO customerSaveDTO);
+
+    ResponseEntity<CustomerWeightAndHeightResponseDTO> addCustomerWeightAndHeight(Long id, CustomerWeightAndHeightRequestDTO customerWeightAndHeightRequestDTO);
 
     @GetMapping("/bmi/{id}")
     public void getCustomerBMI(@PathVariable Long id);

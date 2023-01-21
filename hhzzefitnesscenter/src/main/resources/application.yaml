@@ -1,4 +1,6 @@
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://root:password@localhost:27017/hhzzefitnesscenter
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: hhzzefitnesscenter

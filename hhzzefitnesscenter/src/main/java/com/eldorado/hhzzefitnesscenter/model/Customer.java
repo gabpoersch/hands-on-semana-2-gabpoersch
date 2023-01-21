@@ -3,6 +3,7 @@ package com.eldorado.hhzzefitnesscenter.model;
 import com.mongodb.lang.Nullable;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 @Data
 @Builder
+@ToString
 @Document(collection = "customer")
 public class Customer {
 
