@@ -1,9 +1,12 @@
 package com.eldorado.hhzzefitnesscenter.controller;
 
+import com.eldorado.hhzzefitnesscenter.dto.CustomerSaveDTO;
 import com.eldorado.hhzzefitnesscenter.model.Customer;
 import com.eldorado.hhzzefitnesscenter.repository.CustomerRepository;
 import com.eldorado.hhzzefitnesscenter.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,12 +17,21 @@ public class CustomerControllerImpl implements CustomerController {
     @Autowired
     CustomerRepository customerRepository;
 
-    @Autowired
     CustomerService customerService;
 
     @Override
-    public void addCustomer(Customer customer) {
+    public ResponseEntity<CustomerSaveDTO> addCustomer(CustomerSaveDTO customerSaveDTO) {
+        Customer customer = Customer.builder()
+                .name(customerSaveDTO.getName())
+                .gender(customerSaveDTO.getGender())
+                .id(customerService.getNextVal())
+                .birthDate(customerSaveDTO.getBirthDate())
+                .daysPerMonth(customerSaveDTO.getDaysPerMonth())
+                .phone(customerSaveDTO.getPhone())
+                .address(customerSaveDTO.getAddress()).build();
+
         customerRepository.save(customer);
+        return new ResponseEntity<>(customerSaveDTO, HttpStatus.CREATED);
     }
 
     @Override

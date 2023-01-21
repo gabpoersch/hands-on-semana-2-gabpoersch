@@ -1,13 +1,10 @@
 package com.eldorado.hhzzefitnesscenter.service;
 
 import com.eldorado.hhzzefitnesscenter.model.Customer;
+import org.springframework.stereotype.Service;
 
-public class CustomerService {
-
-    public double bmiCalculator(Customer customer) {
-            double weight = customer.getWeight();
-            double height = customer.getHeight();
-            return weight / (height * height);
-    }
-
+@Service
+public interface CustomerService {
+    Double bmiCalculator(Customer customer);
+    Long getNextVal();
 }
