@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class CustomerWeightAndHeightResponseDTO {
     private Long id;
-    private Double weight;
-    private Double height;
+    private Double oldWeight;
+    private Double newWeight;
+    private Double oldHeight;
+    private Double newHeight;
 }

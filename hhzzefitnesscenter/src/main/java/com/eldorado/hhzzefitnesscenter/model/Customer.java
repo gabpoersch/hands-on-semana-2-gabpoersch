@@ -38,10 +38,8 @@ public class Customer {
     private String address;
 
     @Field(name = "weight")
-    @Nullable
     private Double weight;
 
-    @Nullable
     @Field(name = "height")
     private Double height;
 }
