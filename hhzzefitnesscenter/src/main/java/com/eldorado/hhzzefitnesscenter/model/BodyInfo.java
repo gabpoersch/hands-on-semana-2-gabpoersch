@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 public class BodyInfo {
 
     @Id
+    private Long id;
+
+    @Field(name =  "customer_id")
     private Long customerId;
 
     @Field(name = "weight")
@@ -25,4 +28,8 @@ public class BodyInfo {
 
     @Field(name = "register_date")
     private LocalDateTime registerDate;
+
+    @Field(name = "category")
+    private String category;
+
 }

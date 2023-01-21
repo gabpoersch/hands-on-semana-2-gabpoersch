@@ -1,10 +1,9 @@
 package com.eldorado.hhzzefitnesscenter.service.bodyinfo;
 
-import com.eldorado.hhzzefitnesscenter.dto.BmiDTO;
 import com.eldorado.hhzzefitnesscenter.dto.bodyinfo.BodyInfoDTO;
 import com.eldorado.hhzzefitnesscenter.dto.bodyinfo.BodyInfoRequestDTO;
 import com.eldorado.hhzzefitnesscenter.dto.bodyinfo.BodyInfoResponseDTO;
-import com.eldorado.hhzzefitnesscenter.model.BMICategory;
+import com.eldorado.hhzzefitnesscenter.enums.BMICategory;
 import com.eldorado.hhzzefitnesscenter.model.BodyInfo;
 import com.eldorado.hhzzefitnesscenter.model.Customer;
 import com.eldorado.hhzzefitnesscenter.repository.BodyInfoRepository;
@@ -15,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,10 +30,30 @@ public class BodyInfoServiceImpl implements BodyInfoService {
     }
 
     @Override
-    public Double bmiCalculator(BodyInfo bodyInfo) {
-        double weight = bodyInfo.getWeight();
-        double height = bodyInfo.getHeight();
-        return weight / (height * height);
+    public Long getNextVal() {
+        return bodyInfoRepository.count() + 1;
+    }
+
+    @Override
+    public String bmiCalculator(BodyInfo bodyInfo) {
+        Double weight = bodyInfo.getWeight();
+        Double height = bodyInfo.getHeight();
+        Double bmi = weight / (height * height);
+
+        String category;
+        if (bmi < 18.5) {
+            category = BMICategory.UNDERWEIGHT.getCategory();
+        } else if (bmi < 25) {
+            category = BMICategory.NORMAL.getCategory();
+        } else if (bmi < 30) {
+            category = BMICategory.OVERWEIGHT.getCategory();
+        } else if (bmi < 40) {
+            category = BMICategory.OBESE.getCategory();
+        } else {
+            category = BMICategory.MORBID_OBESE.getCategory();
+        }
+
+        return category;
     }
 
     @Override
@@ -42,17 +62,21 @@ public class BodyInfoServiceImpl implements BodyInfoService {
 
         if (customerOpt.isPresent()) {
             BodyInfo bodyInfo = BodyInfo.builder()
+                    .id(getNextVal())
                     .customerId(id)
                     .weight(bodyInfoDTO.getWeight())
                     .height(bodyInfoDTO.getHeight())
                     .registerDate(LocalDateTime.now())
                     .build();
 
+            bodyInfo.setCategory(bmiCalculator(bodyInfo));
+
             bodyInfoRepository.save(bodyInfo);
             BodyInfoDTO responseDTO = BodyInfoDTO.builder()
                     .id(id)
                     .weight(bodyInfoDTO.getWeight())
                     .height(bodyInfoDTO.getHeight())
+                    .category(bodyInfo.getCategory())
                     .build();
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } else {
@@ -61,34 +85,11 @@ public class BodyInfoServiceImpl implements BodyInfoService {
     }
 
     @Override
-    public ResponseEntity<BmiDTO> getCustomerBMI(Long id) {
-        Optional<Customer> customerOpt = customerRepository.findCustomerById(id);
-        Optional<BodyInfo> bodyInfoOpt = bodyInfoRepository.findBodyInfoByCustomerId(id);
-        Double bmi;
+    public ResponseEntity<List<BodyInfo>> getCustomerBMI(Long id) {
+        List<BodyInfo> bodyInfoList = bodyInfoRepository.findByCustomerIdSortedByDate(id);
 
-        if (customerOpt.isPresent() && bodyInfoOpt.isPresent()) {
-            Customer customer = customerOpt.get();
-            BodyInfo bodyInfo = bodyInfoOpt.get();
-            bmi = this.bmiCalculator(bodyInfo);
-            String category;
-            if (bmi < 18.5) {
-                category = BMICategory.UNDERWEIGHT.getCategory();
-            } else if (bmi < 25) {
-                category = BMICategory.NORMAL.getCategory();
-            } else if (bmi < 30) {
-                category = BMICategory.OVERWEIGHT.getCategory();
-            } else if (bmi < 40) {
-                category = BMICategory.OBESE.getCategory();
-            } else {
-                category = BMICategory.MORBID_OBESE.getCategory();
-            }
-            BmiDTO bmiDTO = BmiDTO.builder()
-                    .id(id)
-                    .name(customer.getName())
-                    .bmi(bmi)
-                    .category(category)
-                    .build();
-            return new ResponseEntity<>(bmiDTO, HttpStatus.OK);
+        if (bodyInfoList != null) {
+            return new ResponseEntity<>(bodyInfoList, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -97,7 +98,7 @@ public class BodyInfoServiceImpl implements BodyInfoService {
 
     @Override
     public ResponseEntity<BodyInfoResponseDTO> updateCustomerWeightAndHeight(Long id, BodyInfoRequestDTO requestDTO) {
-        Optional<BodyInfo> bodyInfoOpt = bodyInfoRepository.findBodyInfoByCustomerId(id);
+        Optional<BodyInfo> bodyInfoOpt = bodyInfoRepository.findBodyInfoById(id);
         if (!bodyInfoOpt.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -108,6 +109,7 @@ public class BodyInfoServiceImpl implements BodyInfoService {
 
         bodyInfo.setWeight(requestDTO.getWeight());
         bodyInfo.setHeight(requestDTO.getHeight());
+        bodyInfo.setCategory(bmiCalculator(bodyInfo));
         bodyInfoRepository.save(bodyInfo);
 
         BodyInfoResponseDTO responseDTO = BodyInfoResponseDTO.builder()
@@ -120,5 +122,4 @@ public class BodyInfoServiceImpl implements BodyInfoService {
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
 }

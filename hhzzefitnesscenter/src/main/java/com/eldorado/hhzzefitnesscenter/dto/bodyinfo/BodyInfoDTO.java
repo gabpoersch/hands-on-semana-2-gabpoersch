@@ -9,4 +9,5 @@ public class BodyInfoDTO {
     private Long id;
     private Double weight;
     private Double height;
+    private String category;
 }

@@ -1,4 +1,4 @@
-package com.eldorado.hhzzefitnesscenter.model;
+package com.eldorado.hhzzefitnesscenter.enums;
 
 public enum BMICategory {
     UNDERWEIGHT("0 - Underweight"),
